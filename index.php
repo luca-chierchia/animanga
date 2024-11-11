@@ -1,25 +1,9 @@
-<?php
-// Connessione al database
-include "classes/Anime.php";
+<?php include 'includes/header.php' ?>
 
-$arrDsn = [
-    "host" => "localhost",
-    "dbname" => "animanga",
-    "user" => "root",
-    "password" => "toor"
-];
+<main>
 
-$arr = [
-    "title"         => "Naruto",
-    "description"   => "Naruto is manga and anime famous in the japan and world",
-    "author"        => "Togashi Kishimimotomotura",
-    "media_type"    => "book",
-    "release_date"  => date("Y-m-d"),
-    "stagioni_totali" => 0,
-    "episodi_totali" => 0,
-    "volumi_totali" => 15,
-    "capitoli_totali" => 144
-];
+    <section> <!-- Carosello degli anime più guardati--></section>
+    <section>  <!-- Carosello degli manga più letti--> </section>
+    <section>  <!-- Carosello delle SerieTV più guardate--></section>
+</main>
 
-$dbh = new Anime(new Database($arrDsn), "media_items");
-$dbh->getProgress();
