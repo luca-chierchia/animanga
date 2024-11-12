@@ -35,19 +35,16 @@ class Database{
             "User: " . $this->username . "\n";
     }
 
-    public function connectToDatabase(){
-        if($this->connection == null){
-            try{
-                $this->connection = new PDO($this->dsn,$this->username,$this->password);
+    public function connectToDatabase(): PDO{
+        if ($this->connection === null) {
+            try {
+                $this->connection = new PDO($this->dsn, $this->username, $this->password);
                 $this->connection->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-
-                return $this->connection;
-            }catch(PDOException $e){
-                echo "Errore di connesione: " . $e->getMessage();
+            } catch (PDOException $e) {
+                echo "Errore di connessione: " . $e->getMessage();
             }
         }
-        else
-            return $this->connection;
+        return $this->connection;;
     }
 
 }

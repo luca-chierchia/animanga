@@ -1,6 +1,6 @@
 <?php
 
-use \interface\CRUDInterface;
+use interface\CRUDInterface;
 
 include 'Database.php';
 include './interface/CRUDInterface.php';
@@ -9,12 +9,61 @@ class MediaItem implements CRUDInterface
     private PDO $dbh;
     private string $tableName;
 
+    private  string $mediaType ;
+    private int $id;
+    private string $title;
+    private string $description;
+    private int $stagioniTotali;
+    private int $episodiTotali;
+
+    private int $volumiTotali;
+    private int $capitoriTotali;
+
+
     public function __construct(Database $db,string $tableName){
 
         $this->dbh = $db->connectToDatabase();
         $this->tableName = $tableName;
+    }
 
+    public  function getMediaType(): string
+    {
+        return $this->mediaType;
+    }
 
+    public function getId(): int
+    {
+        return $this->id;
+    }
+
+    public function getTitle(): string
+    {
+        return $this->title;
+    }
+
+    public function getDescription(): string
+    {
+        return $this->description;
+    }
+
+    public function getStagioniTotali(): int
+    {
+        return $this->stagioniTotali;
+    }
+
+    public function getEpisodiTotali(): int
+    {
+        return $this->episodiTotali;
+    }
+
+    public function getVolumiTotali(): int
+    {
+        return $this->volumiTotali;
+    }
+
+    public function getCapitoriTotali(): int
+    {
+        return $this->capitoriTotali;
     }
 
     /*
@@ -26,6 +75,45 @@ class MediaItem implements CRUDInterface
 
 ];
      */
+    public  function  loadMediaItem($id):?MediaItem{
+
+
+        $sql = "SELECT * FROM media_items WHERE media_item_id = :media_item_id";
+        $stmt = $this->dbh->prepare($sql);
+        $stmt->bindParam(':media_item_id', $id, PDO::PARAM_INT);
+
+        try{
+            $stmt->execute();
+            $stmt->setFetchMode(PDO::FETCH_ASSOC);
+            $array = $stmt->fetch();
+
+
+            if (!$array) {
+                echo "No record found for ID: $id\n";
+            } else {
+                var_dump($array);
+            }
+
+            if($array){
+
+            $this->id = $array['media_item_id'];
+            $this->title = $array['title'];
+            $this->description = $array['description'];
+            $this->stagioniTotali = $array['stagioni_totali'];
+            $this->episodiTotali = $array['episodi_totali'];
+            $this->volumiTotali = $array['volumi_totali'];
+            $this->capitoriTotali = $array['capitoli_totali'];
+
+            return $this;
+            }
+
+            return null;
+
+        }catch(PDOException $e){
+            echo $e->getMessage();
+            return null;
+        }
+    }
     public function create(array $data): bool
     {
         $field = implode(',', array_keys($data));

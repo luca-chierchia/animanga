@@ -1,12 +1,14 @@
 <?php
 
-include 'Database.php';
 include 'Anime.php';
+
 class User
 {
 
     private string $username;
     private string $password;
+
+    private int  $id;
 
     private array $mediaItem = [];
 
@@ -14,19 +16,97 @@ class User
 
     }
 
-    public static function create(string $username, string $password) : User{
+    public static function create() : ?User{
         return new User();
     }
 
-    public static function loadByCredentials(string $username, string $password) : User{
-        return new User();
+    public static function loadByCredentials(string $username, string $password, Database $dbc) : ?User
+    {
+        $db = $dbc->connectToDatabase();
+        $sql = "SELECT * FROM `users` WHERE `username` = :username ";
+        $stmt = $db->prepare($sql);
+
+        $stmt->bindValue(':username', $username);
+
+
+        try {
+            $stmt->execute();
+            $stmt->setFetchMode(\PDO::FETCH_ASSOC);
+            $userData = $stmt->fetch();
+
+
+
+            if ($userData && $password === $userData['password_hash']) {
+
+                $user = new User();
+                $user->username = $userData['username'];
+                $user->password = $userData['password_hash'];
+                $user->id = $userData['user_id'];
+
+                // sql per selezioniamo tutti i record dalla tabella progress associati al suo id
+                // per comporre l'array mediaItems dell'user corrente
+                $sql = "SELECT * FROM `progress` WHERE `user_id` = :id";
+                $stmt = $db->prepare($sql);
+                $stmt->bindValue(':id', $user->id, PDO::PARAM_INT);
+                $stmt->execute();
+                $stmt->setFetchMode(\PDO::FETCH_ASSOC);
+                $items = $stmt->fetchAll();
+
+                foreach ($items as $item) {
+                    $user->mediaItem[] = $item;
+                }
+                return $user;
+
+            } else
+                return  null;
+
+        } catch (PDOException $e) {
+            echo  $e->getMessage();
+            return  null;
+        }finally{
+            $db = null;
+        }
     }
 
-    public function followMediaItems(MediaItem $mediaItem) : void{}
-    public function unfollowMediaItems(MediaItem $mediaItem) : void{}
-    public function incrementChapter(Manga $manga) : void{}
-    public function incrementAnime(Anime $anime) : void{}
-    public function incrementEpisodes(SerieTV $serie) :void {}
+
+    /*
+     * Aggiungere/togliere follow: Implementa metodi che eseguono query di inserimento (INSERT)
+     *  o eliminazione (DELETE) nella tabella progress o user_media_items per riflettere i cambiamenti
+     * nel database.
+     */
+    public function followMediaItems(MediaItem $mediaItem,int $id) : bool{
+        $mediaItemFollow = new MediaItem();
+        $mediaItemFollow->loadMediaItem($id);
+
+        foreach ($mediaItem as $item) {
+            if($item['id'] === $mediaItemFollow['id']){
+                echo "Follow già attivo";
+                return false;
+            }
+
+        }
+        echo "Follow on: ". $mediaItemFollow['title'];
+        return true;
+
+    }
+    public function unfollowMediaItems(MediaItem $mediaItem) : void{
+
+    }
+
+    /*
+     * Gestire il progresso: Implementa metodi che aggiornino il database,
+     *  ad esempio con query di aggiornamento (UPDATE), per incrementare episodi/capitoli
+     *  o aggiornare lo stato di completamento per un mediaItem specifico.
+     */
+    public function incrementChapter(Manga $manga) : void{
+
+    }
+    public function incrementAnime(Anime $anime) : void{
+
+    }
+    public function incrementEpisodes(SerieTV $serie) :void {
+
+    }
 
     public function getFollowedItems() : array{
         return array();

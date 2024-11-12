@@ -2,7 +2,7 @@
 
 // Data source name
 
-return [
+ return [
 
     "dbname"    => "animanga",
     "host"      => "localhost",
