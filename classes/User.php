@@ -74,20 +74,14 @@ class User
      *  o eliminazione (DELETE) nella tabella progress o user_media_items per riflettere i cambiamenti
      * nel database.
      */
-    public function followMediaItems(MediaItem $mediaItem,int $id) : bool{
-        $mediaItemFollow = new MediaItem();
-        $mediaItemFollow->loadMediaItem($id);
-
-        foreach ($mediaItem as $item) {
-            if($item['id'] === $mediaItemFollow['id']){
-                echo "Follow già attivo";
+    public function followMediaItems(MediaItem $mediaItem) : bool{
+        foreach ($this->mediaItem as $item){
+            if($item['media_item_id'] === $mediaItem->getId()){
+                echo "questo tipo di item è già seguito";
                 return false;
             }
-
         }
-        echo "Follow on: ". $mediaItemFollow['title'];
         return true;
-
     }
     public function unfollowMediaItems(MediaItem $mediaItem) : void{
 

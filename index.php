@@ -7,8 +7,14 @@ $db = new Database($config);
 $user = User::loadByCredentials('Mario','potter21',$db);
 var_dump($user);
 $item = new MediaItem($db,'media_items');
-$item->loadMediaItem(7);
-$user->followMediaItems($item,7);
+$item->loadMediaItem(6);
+if($user->followMediaItems($item))
+    echo"follow ". $item->getTitle()."\n";
+else
+    echo "è gia un media tra i tuoi seguiti";
+
+
+
 
 
 /*
