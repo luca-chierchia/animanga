@@ -17,7 +17,7 @@ class MediaItem implements CRUDInterface
     private int $episodiTotali;
 
     private int $volumiTotali;
-    private int $capitoriTotali;
+    private int $capitoliTotali;
 
 
     public function __construct(Database $db,string $tableName){
@@ -61,9 +61,9 @@ class MediaItem implements CRUDInterface
         return $this->volumiTotali;
     }
 
-    public function getCapitoriTotali(): int
+    public function getCapitoliTotali(): int
     {
-        return $this->capitoriTotali;
+        return $this->capitoliTotali;
     }
 
     /*
@@ -95,7 +95,7 @@ class MediaItem implements CRUDInterface
             $this->stagioniTotali = $array['stagioni_totali'];
             $this->episodiTotali = $array['episodi_totali'];
             $this->volumiTotali = $array['volumi_totali'];
-            $this->capitoriTotali = $array['capitoli_totali'];
+            $this->capitoliTotali = $array['capitoli_totali'];
 
             return $this;
             }

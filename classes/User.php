@@ -131,12 +131,53 @@ class User
      *  ad esempio con query di aggiornamento (UPDATE), per incrementare episodi/capitoli
      *  o aggiornare lo stato di completamento per un mediaItem specifico.
      */
-    public function incrementChapter(MediaItem $manga) : bool{
+    public function incrementChapter(MediaItem $manga,Database $db) : bool{
+        $capitoliLetti = 1;
+        $cap = $manga->getCapitoliTotali();
+
         if($this->containsMediaItem($manga)) {
-            return true;
+
+            // Mi connetto al DB
+            $dbc = $db->connectToDatabase();
+
+            try {
+                $sql = "SELECT chapters_read FROM progress WHERE user_id = :user_id AND media_item_id = :media_item_id";
+                $stmt = $dbc->prepare($sql);
+                $stmt->bindValue(':user_id', $this->id, PDO::PARAM_INT);
+                $stmt->bindValue(':media_item_id', $manga->getId(), PDO::PARAM_INT);
+                $stmt->execute();
+                $currentProgress = $stmt->fetchColumn();
+
+                $newCapRead = min($currentProgress + $capitoliLetti, $cap);
+                // Verifico che il valore di incremento non sia superiore al numero reale di episodi del media
+                // TODO
+
+
+                // Preparo la SQL che aggiorna gli episodi guardati nella tabella progress
+
+                $sql = "UPDATE progress 
+                        SET chapters_read = :chapters_read 
+                        WHERE user_id = :user_id AND media_item_id = :media_item_id";
+                $stmt = $dbc->prepare($sql);
+                $stmt->bindValue(':chapters_read', $newCapRead, PDO::PARAM_INT);
+                $stmt->bindValue(':user_id', $this->id, PDO::PARAM_INT);
+                $stmt->bindValue(':media_item_id', $manga->getId(), PDO::PARAM_INT);
+                $stmt->execute();
+                if ($stmt->rowCount() > 0) {
+                    echo "Capitoli incrementati a " . $newCapRead;
+                    return true;
+                } else {
+                    echo "Nessun aggiornamento effettuato. Verifica che l'ID dell'utente e il media_item_id siano corretti.";
+                    return false;
+                }
+
+            } catch (PDOException $e) {
+                echo "Errore SQL: " . $e->getMessage();
+                return false;
+            }
         }
 
-        echo "Non puoi avere progressi su un manga che non fa parte dei tuoi follow";
+        echo "Non puoi avere progressi su un media che non fa parte dei tuoi follow.";
         return false;
     }
 
@@ -159,34 +200,27 @@ class User
                 $stmt->execute();
                 $currentProgress = $stmt->fetchColumn();
 
-                var_dump($currentProgress);
-
-                 if($currentProgress === false){
-                    echo "colonna non trovata";
-                    return false;
-            }
-
-            $newEpisodesWatched = min($currentProgress + $episodiGuardati, $ep);
+                $newEpisodesWatched = min($currentProgress + $episodiGuardati, $ep);
             // Verifico che il valore di incremento non sia superiore al numero reale di episodi del media
             // TODO
 
 
             // Preparo la SQL che aggiorna gli episodi guardati nella tabella progress
 
-            $sql = "UPDATE progress 
-                    SET episodes_watched = :episodes_watched 
-                    WHERE user_id = :user_id AND media_item_id = :media_item_id";
-            $stmt = $dbc->prepare($sql);
-            $stmt->bindValue(':episodes_watched', $newEpisodesWatched, PDO::PARAM_INT);
-            $stmt->bindValue(':user_id', $this->id, PDO::PARAM_INT);
-            $stmt->bindValue(':media_item_id', $serie->getId(), PDO::PARAM_INT);
-            $stmt->execute();
-                if ($stmt->rowCount() > 0) {
-                    echo "Episodi incrementati a " . $newEpisodesWatched;
-                    return true;
-                } else {
-                    echo "Nessun aggiornamento effettuato. Verifica che l'ID dell'utente e il media_item_id siano corretti.";
-                    return false;
+                $sql = "UPDATE progress 
+                        SET episodes_watched = :episodes_watched 
+                        WHERE user_id = :user_id AND media_item_id = :media_item_id";
+                $stmt = $dbc->prepare($sql);
+                $stmt->bindValue(':episodes_watched', $newEpisodesWatched, PDO::PARAM_INT);
+                $stmt->bindValue(':user_id', $this->id, PDO::PARAM_INT);
+                $stmt->bindValue(':media_item_id', $serie->getId(), PDO::PARAM_INT);
+                $stmt->execute();
+                    if ($stmt->rowCount() > 0) {
+                        echo "Episodi incrementati a " . $newEpisodesWatched;
+                        return true;
+                    } else {
+                        echo "Nessun aggiornamento effettuato. Verifica che l'ID dell'utente e il media_item_id siano corretti.";
+                        return false;
                 }
 
             } catch (PDOException $e) {
