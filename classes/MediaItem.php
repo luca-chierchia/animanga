@@ -87,13 +87,6 @@ class MediaItem implements CRUDInterface
             $stmt->setFetchMode(PDO::FETCH_ASSOC);
             $array = $stmt->fetch();
 
-
-            if (!$array) {
-                echo "No record found for ID: $id\n";
-            } else {
-                var_dump($array);
-            }
-
             if($array){
 
             $this->id = $array['media_item_id'];

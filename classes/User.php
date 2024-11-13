@@ -68,22 +68,61 @@ class User
         }
     }
 
+    public function containsMediaItem(MediaItem $mediaItem) : bool{
+        foreach ($this->mediaItem as $item) {
+            if ($item['media_item_id'] === $mediaItem->getId()) {
+                return true;
+            }
+        }
+        return false;
+    }
 
     /*
      * Aggiungere/togliere follow: Implementa metodi che eseguono query di inserimento (INSERT)
      *  o eliminazione (DELETE) nella tabella progress o user_media_items per riflettere i cambiamenti
      * nel database.
      */
-    public function followMediaItems(MediaItem $mediaItem) : bool{
-        foreach ($this->mediaItem as $item){
-            if($item['media_item_id'] === $mediaItem->getId()){
-                echo "questo tipo di item è già seguito";
-                return false;
-            }
+    public function followMediaItems(MediaItem $mediaItem,Database $dbc) : bool{
+        if($this->containsMediaItem($mediaItem)){
+            echo "sei già un follower di questo media";
+            return false;
         }
-        return true;
+
+        $db = $dbc->connectToDatabase();
+        $sql = "INSERT INTO progress (media_item_id, user_id, episodes_watched, chapters_read) 
+                VALUES (:media_item_id, :user_id, :episodes_watched, :chapters_read)";
+        $stmt = $db->prepare($sql);
+        $stmt->bindValue(':media_item_id', $mediaItem->getId(), PDO::PARAM_INT);
+        $stmt->bindValue(':user_id',$this->id, PDO::PARAM_INT);
+        $stmt->bindValue(':chapters_read',0, PDO::PARAM_INT);
+        $stmt->bindValue(':episodes_watched',0, PDO::PARAM_INT);
+
+        try{
+            $stmt->execute();
+            return true;
+        }catch (PDOException $e){
+            echo $e->getMessage();
+            return false;
+        } finally {
+            $db = null;
+        }
     }
-    public function unfollowMediaItems(MediaItem $mediaItem) : void{
+    public function unfollowMediaItems(MediaItem $mediaItem,Database $db) : bool{
+        if($this->containsMediaItem($mediaItem)){
+
+            $sql = "DELETE FROM progress WHERE media_item_id = :media_item_id AND user_id = :user_id";
+            $dbc = $db->connectToDatabase();
+            $stmt = $dbc->prepare($sql);
+            $stmt->bindValue(':media_item_id', $mediaItem->getId(), PDO::PARAM_INT);
+            $stmt->bindValue(':user_id', $this->id, PDO::PARAM_INT);
+            $stmt->execute();
+            echo "Unfollow eseguito con successo";
+            return true;
+
+        }
+        echo "l'elemento non è presente nella tua lista di media seguiti.";
+        return false;
+
 
     }
 
@@ -92,17 +131,89 @@ class User
      *  ad esempio con query di aggiornamento (UPDATE), per incrementare episodi/capitoli
      *  o aggiornare lo stato di completamento per un mediaItem specifico.
      */
-    public function incrementChapter(Manga $manga) : void{
+    public function incrementChapter(MediaItem $manga) : bool{
+        if($this->containsMediaItem($manga)) {
+            return true;
+        }
+
+        echo "Non puoi avere progressi su un manga che non fa parte dei tuoi follow";
+        return false;
+    }
+
+    // incrementEpisodes incrementa gli episodi guardati di un certo valore, se il valore non viene inserito, di default viene assegnato uno.
+    //
+    public function incrementEpisodes(MediaItem $serie, Database $db) :bool {
+        $episodiGuardati = 1;
+        $ep = $serie->getEpisodiTotali();
+
+        if($this->containsMediaItem($serie)) {
+
+            // Mi connetto al DB
+            $dbc = $db->connectToDatabase();
+
+            try {
+                $sql = "SELECT episodes_watched FROM progress WHERE user_id = :user_id AND media_item_id = :media_item_id";
+                $stmt = $dbc->prepare($sql);
+                $stmt->bindValue(':user_id', $this->id, PDO::PARAM_INT);
+                $stmt->bindValue(':media_item_id', $serie->getId(), PDO::PARAM_INT);
+                $stmt->execute();
+                $currentProgress = $stmt->fetchColumn();
+
+                var_dump($currentProgress);
+
+                 if($currentProgress === false){
+                    echo "colonna non trovata";
+                    return false;
+            }
+
+            $newEpisodesWatched = min($currentProgress + $episodiGuardati, $ep);
+            // Verifico che il valore di incremento non sia superiore al numero reale di episodi del media
+            // TODO
+
+
+            // Preparo la SQL che aggiorna gli episodi guardati nella tabella progress
+
+            $sql = "UPDATE progress 
+                    SET episodes_watched = :episodes_watched 
+                    WHERE user_id = :user_id AND media_item_id = :media_item_id";
+            $stmt = $dbc->prepare($sql);
+            $stmt->bindValue(':episodes_watched', $newEpisodesWatched, PDO::PARAM_INT);
+            $stmt->bindValue(':user_id', $this->id, PDO::PARAM_INT);
+            $stmt->bindValue(':media_item_id', $serie->getId(), PDO::PARAM_INT);
+            $stmt->execute();
+                if ($stmt->rowCount() > 0) {
+                    echo "Episodi incrementati a " . $newEpisodesWatched;
+                    return true;
+                } else {
+                    echo "Nessun aggiornamento effettuato. Verifica che l'ID dell'utente e il media_item_id siano corretti.";
+                    return false;
+                }
+
+            } catch (PDOException $e) {
+                echo "Errore SQL: " . $e->getMessage();
+                return false;
+            }
+        }
+
+        echo "Non puoi avere progressi su un media che non fa parte dei tuoi follow.";
+        return false;
 
     }
-    public function incrementAnime(Anime $anime) : void{
 
-    }
-    public function incrementEpisodes(SerieTV $serie) :void {
+    // Da vedere come deve restituire i dati nella dashboard dell'User;
+    // La seguente funzione restituisce un array di oggetti di tipo MediaItems, la funzione deve essere passata ad un array;
+    public function getFollowedItems(MediaItem $mediaItems):array {
+        $items = [];
 
-    }
+        foreach($this->mediaItem as $item){
+            $id = $item['media_item_id'] ?? null;
+            if($id != null)
+                $item = $mediaItems->loadMediaItem($id);
 
-    public function getFollowedItems() : array{
-        return array();
+
+            if($item != null)
+                $items[] = $item;
+        }
+        return $items;
     }
 }
