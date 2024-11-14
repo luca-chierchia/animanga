@@ -12,8 +12,14 @@
 </head>
 <body>
 <header class="container-md vh-25">
-    <div class="" id="hero">
-        <img src="" alt="Animanga Hero" class="img-fluid w-100 h-100" style="object-fit: cover;">
+    <div class="hero text-center text-light position-relative">
+        <div class="overlay"></div>
+        <div class="content position-relative z-index-2">
+            <h1>Benvenuti su Animanga</h1>
+            <p class="lead">Scopri gli anime e i manga più popolari e seguiti dalla community</p>
+            <a href="#anime" class="btn btn-primary btn-lg mt-3">Esplora Anime</a>
+            <a href="#manga" class="btn btn-secondary btn-lg mt-3">Scopri i Manga</a>
+        </div>
     </div>
     <nav class="navbar  d-flex justify-content-between align-items-center " id="navbarItem">
 

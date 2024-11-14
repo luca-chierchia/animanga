@@ -20,8 +20,8 @@ $arrMostFollowedSeries = mostFollowed('video',$db);
 $arrOfItem = [];
 
 foreach ($arrMostFollowedSeries as $mostFollowedSeries) {
-    $item = new MediaItem($db,'media_items');
-    $item->loadMediaItem($mostFollowedSeries['media_item_id']);
+    $item = new MediaItem();
+    $item->loadMediaItem($mostFollowedSeries['media_item_id'],$db);
     $arrOfItem[] = $item;
 
 }

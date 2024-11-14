@@ -22,10 +22,8 @@ class MediaItem implements CRUDInterface
     private int $capitoliTotali;
 
 
-    public function __construct(Database $db,string $tableName){
+    public function __construct(){
 
-        $this->dbh = $db->connectToDatabase();
-        $this->tableName = $tableName;
     }
 
     public  function getMediaType(): string
@@ -81,11 +79,11 @@ class MediaItem implements CRUDInterface
 
 ];
      */
-    public  function  loadMediaItem($id):?MediaItem{
+    public  function  loadMediaItem(int $id, Database $db):?MediaItem{
 
-
+        $dbh = $db->connectToDatabase();
         $sql = "SELECT * FROM media_items WHERE media_item_id = :media_item_id";
-        $stmt = $this->dbh->prepare($sql);
+        $stmt = $dbh->prepare($sql);
         $stmt->bindParam(':media_item_id', $id, PDO::PARAM_INT);
 
         try{
@@ -114,13 +112,14 @@ class MediaItem implements CRUDInterface
             return null;
         }
     }
-    public function create(array $data): bool
+    public function create(array $data, Database $db): bool
     {
+        $dbh = $db->connectToDatabase();
         $field = implode(',', array_keys($data));
-        $sql = "INSERT INTO {$this->tableName} ({$field})
+        $sql = "INSERT INTO media_items ({$field})
                 VALUES (:title, :description, :author ,:media_type, :release_date, :stagioni_totali, :episodi_totali, :volumi_totali, :capitoli_totali)";
         $data['release_date'] = date('Y-m-d');
-        $stmt = $this->dbh->prepare($sql);
+        $stmt = $dbh->prepare($sql);
 
         try{
 
@@ -143,8 +142,9 @@ class MediaItem implements CRUDInterface
         }
     }
 
-    public function update(array $data, int $id): bool
+    public function update(array $data, int $id, Database $db): bool
     {
+        $dbh = $db->connectToDatabase();
         $tmpArr = [];
 
         foreach ($data as $key => $value) {
@@ -165,11 +165,11 @@ class MediaItem implements CRUDInterface
         );
 
         // Costruzione della query SQL
-        $sql = "UPDATE {$this->tableName} \n";
+        $sql = "UPDATE media_items \n";
         $sql .= "SET " . implode(',', $mappedData) . "\n";
         $sql .= "WHERE media_item_id = :id";
 
-        $stmt = $this->dbh->prepare($sql);
+        $stmt = $dbh->prepare($sql);
 
         try {
             // Binding dei parametri per i dati di aggiornamento
@@ -190,15 +190,17 @@ class MediaItem implements CRUDInterface
     }
 
     // DELETE FROM table_name WHERE condition;
-    public function delete( int $id): bool
+    public function delete( int $id, Database $db): bool
     {
-        $sql = "DELETE FROM {$this->tableName} 
+        $dbh = $db->connectToDatabase();
+        $sql = "DELETE FROM media_items 
                 WHERE media_item_id = :id";
 
-        $stmt = $this->dbh->prepare($sql);
+        $stmt = $dbh->prepare($sql);
 
         try{
             $stmt->bindParam(':id', $id, PDO::PARAM_INT);
+            $stmt->execute();
             echo "Hai eliminato l'elemento \n";
             return true;
         } catch (PDOException $e) {
@@ -207,10 +209,11 @@ class MediaItem implements CRUDInterface
         }
     }
 
-    public function readAll(): array
+    public function readAll(Database $db): array
     {
-        $sql = "SELECT * FROM {$this->tableName}";
-        $stmt = $this->dbh->prepare($sql);
+        $dbh = $db->connectToDatabase();
+        $sql = "SELECT * FROM media_items";
+        $stmt = $dbh->prepare($sql);
 
         try{
             $stmt->execute();
