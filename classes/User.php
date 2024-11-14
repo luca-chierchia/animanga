@@ -1,6 +1,6 @@
 <?php
 
-include 'Anime.php';
+
 
 class User
 {

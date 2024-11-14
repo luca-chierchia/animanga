@@ -3,7 +3,7 @@
 use interface\Progredibile;
 
 include './interface/Progredibile.php';
-include 'MediaItem.php';
+
 
 class Anime extends MediaItem implements Progredibile
 {

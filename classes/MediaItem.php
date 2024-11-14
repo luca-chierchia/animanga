@@ -2,7 +2,7 @@
 
 use interface\CRUDInterface;
 
-include 'Database.php';
+
 include './interface/CRUDInterface.php';
 class MediaItem implements CRUDInterface
 {
@@ -12,6 +12,8 @@ class MediaItem implements CRUDInterface
     private  string $mediaType ;
     private int $id;
     private string $title;
+
+    private string $author;
     private string $description;
     private int $stagioniTotali;
     private int $episodiTotali;
@@ -39,6 +41,10 @@ class MediaItem implements CRUDInterface
     public function getTitle(): string
     {
         return $this->title;
+    }
+
+    public function getAuthor(): string{
+        return $this->author;
     }
 
     public function getDescription(): string
@@ -91,6 +97,7 @@ class MediaItem implements CRUDInterface
 
             $this->id = $array['media_item_id'];
             $this->title = $array['title'];
+            $this->author = $array['author'];
             $this->description = $array['description'];
             $this->stagioniTotali = $array['stagioni_totali'];
             $this->episodiTotali = $array['episodi_totali'];
