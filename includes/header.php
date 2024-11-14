@@ -12,7 +12,7 @@
 </head>
 <body>
 <header class="container-md vh-25">
-    <div class="hero text-center text-light position-relative">
+    <div class="hero text-center text-light position-relative" style="background-image: url('asset/img/serie-tv-streaming-1024x576.jpg')">
         <div class="overlay"></div>
         <div class="content position-relative z-index-2">
             <h1>Benvenuti su Animanga</h1>
