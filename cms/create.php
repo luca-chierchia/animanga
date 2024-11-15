@@ -20,10 +20,12 @@ if (isset($_POST['title'], $_POST['author'], $_POST['media_type'], $_POST['descr
     $_POST['volumi_totali']   = $_POST['volumi_totali'] ?? 0;
     $_POST['capitoli_totali'] = $_POST['capitoli_totali'] ?? 0;
 
+
     try {
 
         $item = new MediaItem();
         $test = $item->create($_POST, $db);
+
     }catch (Exception $e) {
         var_dump($e->getMessage());
         exit();

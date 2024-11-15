@@ -6,15 +6,15 @@ include 'util/function.php';
 $config = include 'util/dsn.php';
 
 $arr = [
-    "title"         => "titol",
-    "description"   => "descrizio pova",
-    "author"        => "autore di pra",
+    "title"         => "wefwefwefwef",
+    "description"   => "descrifwefewfewfzio po  wefewf  fwef ewew wef ewfefdfsdaf e4325345 4dfsdf sd  df dsva",
+    "author"        => "autorefdfsdf  di pra",
     "media_type"    => "book",
     "release_date"  => date("Y-m-d"),
     "stagioni_totali" => 1,
     "episodi_totali" => 24,
-    "capitoli_totali"=> 1,
-    "volumi_totali" => 2,
+    "capitoli_totali"=> 133,
+    "volumi_totali" => 12,
 ];
 
 $db = new Database($config);

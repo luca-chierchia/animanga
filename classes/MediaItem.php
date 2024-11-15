@@ -1,5 +1,6 @@
 <?php
-include '../interface/CRUDInterface.php';
+require_once __DIR__ . '/../interface/CRUDInterface.php';
+
 
 
 use interface\CRUDInterface;
@@ -119,9 +120,9 @@ class MediaItem implements CRUDInterface
     {
         $this->dbc = $db->connectToDatabase();
 
-        $field = implode(',', array_keys($data));
-        var_dump($field,$data);
-//enum('video', 'book', 'audio')
+
+
+
         $sql = "INSERT INTO media_items (title, description, author ,media_type, release_date, stagioni_totali, episodi_totali, volumi_totali, capitoli_totali)
                 VALUES (:title, :description, :author ,:media_type, :release_date, :stagioni_totali, :episodi_totali, :volumi_totali, :capitoli_totali)";
         $data['release_date'] = date('Y-m-d');
@@ -132,13 +133,13 @@ class MediaItem implements CRUDInterface
             $stmt->bindValue(':title', $data['title'], PDO::PARAM_STR);
             $stmt->bindValue(':description', $data['description'], PDO::PARAM_STR);
             $stmt->bindValue(':author', $data['author'], PDO::PARAM_STR);
-            $stmt->bindValue(':media_type', 'video', PDO::PARAM_STR);
+            $stmt->bindValue(':media_type', $data['media_type'], PDO::PARAM_STR);
             $stmt->bindValue(':release_date', $data['release_date'], PDO::PARAM_STR);
             $stmt->bindValue(':stagioni_totali', $data['stagioni_totali'], PDO::PARAM_INT);
             $stmt->bindValue(':episodi_totali', $data['episodi_totali'], PDO::PARAM_INT);
             $stmt->bindValue(':volumi_totali', $data['volumi_totali'], PDO::PARAM_INT);
-            $stmt->bindValue(':capitoli_totali', $data['capitoli_totali'], PDO::PARAM_INT);
-            //$stmt->debugDumpParams();
+            $stmt->bindValue('capitoli_totali', $data['capitoli_totali'], PDO::PARAM_INT);
+
             return $stmt->execute();
 
         }catch(PDOException $e){
