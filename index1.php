@@ -6,8 +6,7 @@ include "classes/MediaItem.php";
 include 'util/function.php';
 $config = include 'util/dsn.php';
 $db = new Database($config);
-$user = User::loadByCredentials('Mario','potter21',$db);
-$user2 = User::loadByCredentials('Ellech','1029dmkl',$db);
+
 
 ?>
 
@@ -17,8 +16,8 @@ $user2 = User::loadByCredentials('Ellech','1029dmkl',$db);
         <!-- Carosello degli anime più guardati-->
 
         <div class="container-md my-4 text-center">
-            <h2 class="">Anime</h2>
-            <p>In questa sezione vengono proposti gli anime più guardati dagli utenti.</p>
+            <h2 class="">Serie TV</h2>
+            <p>In questa sezione vengono proposte le Serie TV più seguite dagli utenti.</p>
 
         </div>
 
@@ -27,7 +26,7 @@ $user2 = User::loadByCredentials('Ellech','1029dmkl',$db);
         $arrOfAnimeItem = [];
 
         foreach ($arrMostFollowedSeries as $mostFollowedSeries) {
-            $item = new MediaItem($db,'media_items');
+            $item = new MediaItem();
             $item->loadMediaItem($mostFollowedSeries['media_item_id'],$db);
             $arrOfAnimeItem[] = $item;
 
@@ -64,7 +63,7 @@ $user2 = User::loadByCredentials('Ellech','1029dmkl',$db);
         $arrOfMangaItem = [];
 
         foreach ($arrMostFollowedMangas as $mostFollowedMangas) {
-            $item = new MediaItem($db,'media_items');
+            $item = new MediaItem();
             $item->loadMediaItem($mostFollowedMangas['media_item_id'],$db);
             $arrOfMangaItem[] = $item;
 

@@ -9,16 +9,16 @@
 
 
 class Database{
-    private $host;
-    private $db;
-    private $username;
-    private $password;
-    private $dsn;
-    private $connection = null;
+    private string $host;
+    private string $db;
+    private string $username;
+    private string $password;
+    private string $dsn;
+    private ?PDO $connection =  null;
 
 
     // costruttore da migliorare
-    public function __construct($array)
+    public function __construct(array $array)
     {
         $this->db = $array['dbname'];
         $this->host = $array['host'];
