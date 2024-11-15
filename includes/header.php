@@ -24,7 +24,7 @@
     <nav class="navbar  d-flex justify-content-between align-items-center " id="navbarItem">
 
             <ul class="navbar-nav flex-row ">
-                <li class="nav-item mx-2"> <a class="nav-link" href=""> Home </a> </li>
+                <li class="nav-item mx-2"> <a class="nav-link" href="index.php"> Home </a> </li>
                 <li class="nav-item mx-2" > <a class="nav-link" href=""> Anime </a> </li>
                 <li class="nav-item mx-2"> <a class="nav-link" href=""> Manga </a> </li>
                 <li class="nav-item mx-2"> <a class="nav-link" href=""> Serie TV</a> </li>
@@ -32,7 +32,7 @@
 
 
             <ul class="navbar-nav flex-row border">
-                <li class="nav-item mx-2"><a class="nav-link" href="">Area riservata</a></li>
+                <li class="nav-item mx-2"><a class="nav-link" href="login.php">Area riservata</a></li>
             </ul>
 
     </nav>

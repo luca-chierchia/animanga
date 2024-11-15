@@ -44,7 +44,7 @@ class Database{
                 echo "Errore di connessione: " . $e->getMessage();
             }
         }
-        return $this->connection;;
+        return $this->connection;
     }
 
 }

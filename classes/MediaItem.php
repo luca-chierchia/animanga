@@ -1,14 +1,17 @@
 <?php
+include '../interface/CRUDInterface.php';
+
 
 use interface\CRUDInterface;
 
 
-include './interface/CRUDInterface.php';
+
 class MediaItem implements CRUDInterface
 {
-    private PDO $dbh;
-    private string $tableName;
 
+
+
+    private PDO $dbc;
     private  string $mediaType ;
     private int $id;
     private string $title;
@@ -81,9 +84,9 @@ class MediaItem implements CRUDInterface
      */
     public  function  loadMediaItem(int $id, Database $db):?MediaItem{
 
-        $dbh = $db->connectToDatabase();
+        $this->dbc = $db->connectToDatabase();
         $sql = "SELECT * FROM media_items WHERE media_item_id = :media_item_id";
-        $stmt = $dbh->prepare($sql);
+        $stmt = $this->dbc->prepare($sql);
         $stmt->bindParam(':media_item_id', $id, PDO::PARAM_INT);
 
         try{
@@ -114,25 +117,28 @@ class MediaItem implements CRUDInterface
     }
     public function create(array $data, Database $db): bool
     {
-        $dbh = $db->connectToDatabase();
+        $this->dbc = $db->connectToDatabase();
+
         $field = implode(',', array_keys($data));
-        $sql = "INSERT INTO media_items ({$field})
+        var_dump($field,$data);
+//enum('video', 'book', 'audio')
+        $sql = "INSERT INTO media_items (title, description, author ,media_type, release_date, stagioni_totali, episodi_totali, volumi_totali, capitoli_totali)
                 VALUES (:title, :description, :author ,:media_type, :release_date, :stagioni_totali, :episodi_totali, :volumi_totali, :capitoli_totali)";
         $data['release_date'] = date('Y-m-d');
-        $stmt = $dbh->prepare($sql);
+        $stmt = $this->dbc->prepare($sql);
 
         try{
 
-            $stmt->bindParam(':title', $data['title'], PDO::PARAM_STR);
-            $stmt->bindParam(':description', $data['description'], PDO::PARAM_STR);
-            $stmt->bindParam(':author', $data['author'], PDO::PARAM_STR);
-            $stmt->bindParam(':media_type', $data['media_type'], PDO::PARAM_STR);
-            $stmt->bindParam(':release_date', $data['release_date'], PDO::PARAM_STR);
-            $stmt->bindParam(':stagioni_totali', $data['stagioni_totali'], PDO::PARAM_INT);
-            $stmt->bindParam(':episodi_totali', $data['episodi_totali'], PDO::PARAM_INT);
-            $stmt->bindParam(':volumi_totali', $data['volumi_totali'], PDO::PARAM_INT);
-            $stmt->bindParam(':capitoli_totali', $data['capitoli_totali'], PDO::PARAM_INT);
-            echo "Dati salvati nel DB \n";
+            $stmt->bindValue(':title', $data['title'], PDO::PARAM_STR);
+            $stmt->bindValue(':description', $data['description'], PDO::PARAM_STR);
+            $stmt->bindValue(':author', $data['author'], PDO::PARAM_STR);
+            $stmt->bindValue(':media_type', 'video', PDO::PARAM_STR);
+            $stmt->bindValue(':release_date', $data['release_date'], PDO::PARAM_STR);
+            $stmt->bindValue(':stagioni_totali', $data['stagioni_totali'], PDO::PARAM_INT);
+            $stmt->bindValue(':episodi_totali', $data['episodi_totali'], PDO::PARAM_INT);
+            $stmt->bindValue(':volumi_totali', $data['volumi_totali'], PDO::PARAM_INT);
+            $stmt->bindValue(':capitoli_totali', $data['capitoli_totali'], PDO::PARAM_INT);
+            //$stmt->debugDumpParams();
             return $stmt->execute();
 
         }catch(PDOException $e){
@@ -144,7 +150,7 @@ class MediaItem implements CRUDInterface
 
     public function update(array $data, int $id, Database $db): bool
     {
-        $dbh = $db->connectToDatabase();
+        $this->dbc = $db->connectToDatabase();
         $tmpArr = [];
 
         foreach ($data as $key => $value) {
@@ -169,7 +175,7 @@ class MediaItem implements CRUDInterface
         $sql .= "SET " . implode(',', $mappedData) . "\n";
         $sql .= "WHERE media_item_id = :id";
 
-        $stmt = $dbh->prepare($sql);
+        $stmt = $this->dbc->prepare($sql);
 
         try {
             // Binding dei parametri per i dati di aggiornamento
@@ -192,11 +198,11 @@ class MediaItem implements CRUDInterface
     // DELETE FROM table_name WHERE condition;
     public function delete( int $id, Database $db): bool
     {
-        $dbh = $db->connectToDatabase();
+        $this->dbc = $db->connectToDatabase();
         $sql = "DELETE FROM media_items 
                 WHERE media_item_id = :id";
 
-        $stmt = $dbh->prepare($sql);
+        $stmt = $this->dbc->prepare($sql);
 
         try{
             $stmt->bindParam(':id', $id, PDO::PARAM_INT);
@@ -213,7 +219,7 @@ class MediaItem implements CRUDInterface
     {
         $dbh = $db->connectToDatabase();
         $sql = "SELECT * FROM media_items";
-        $stmt = $dbh->prepare($sql);
+        $stmt = $this->dbc->prepare($sql);
 
         try{
             $stmt->execute();
