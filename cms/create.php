@@ -6,7 +6,7 @@ session_start();
 $config = include "../util/dsn.php";
 $db = new Database($config);
 $msg = "";
-
+$processed = "";
 if (!isset($_SESSION['username']) || $_SESSION['username'] !== 'admin') {
     header('Location: ../login.php');
     exit;
@@ -25,16 +25,16 @@ if (isset($_POST['title'], $_POST['author'], $_POST['media_type'], $_POST['descr
 
         $item = new MediaItem();
         $test = $item->create($_POST, $db);
+        $processed = "success";
+        header('Location: crudProcessed.php?processed=' . $processed);
+        exit();
 
     }catch (Exception $e) {
-        var_dump($e->getMessage());
+        $processed = "fail";
+        header('Location: crudProcessed.php?processed=' . $processed);
         exit();
     }
-    if ($test) {
-        $msg = "Hai inserito un nuovo record nel DB.";
-    } else {
-        $msg = "Errore nell'inserimento del record.";
-    }
+
 } else {
     $msg = "Compila tutti i campi obbligatori.";
 }

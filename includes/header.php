@@ -11,6 +11,18 @@
     <link href="../css/bootstrap/bootstrap.min.css" rel="stylesheet" >
 </head>
 <body>
+<?php
+session_start();
+
+// Controlla se c'è una sessione attiva
+if (isset($_SESSION['username'])) {
+    $isAdmin = $_SESSION['username'] === 'admin';
+    $isLoggedIn = true;
+    $username = htmlspecialchars($_SESSION['username']);
+} else {
+    $isLoggedIn = false;
+}
+?>
 <header class="container-md vh-25">
     <div class="hero text-center text-light position-relative" style="background-image: url('asset/img/serie-tv-streaming-1024x576.jpg')">
         <div class="overlay"></div>
@@ -31,9 +43,34 @@
             </ul>
 
 
-            <ul class="navbar-nav flex-row border">
-                <li class="nav-item mx-2"><a class="nav-link" href="login.php">Area riservata</a></li>
-            </ul>
+        <ul class="navbar-nav flex-row">
+            <?php if ($isLoggedIn): ?>
+                <!-- Utente loggato -->
+                <li class="nav-item mx-2">
+                    <span class="nav-link text-primary">Benvenuto, <?php echo $username; ?>!</span>
+                </li>
+                <li class="nav-item mx-2">
+                    <a class="nav-link btn btn-outline-danger btn-sm" href="logout.php">Logout</a>
+                </li>
+                <?php if($isAdmin): ?>
+                    <li class="nav-item mx-2">
+                        <a class="nav-link btn btn-success btn-sm" href="admin/adminDashboard.php">Area Riservata</a>
+                    </li>
+                <?php else: ?>
+                    <li class="nav-item mx-2">
+                        <a class="nav-link btn btn-success btn-sm" href="user/userDashboard.php">Area Riservata</a>
+                    </li>
+                <?php endif; ?>
+            <?php else: ?>
+                <!-- Utente non loggato -->
+                <li class="nav-item mx-2">
+                    <a class="nav-link btn btn-primary btn-sm" href="login.php">Login</a>
+                </li>
+                <li class="nav-item mx-2">
+                    <a class="nav-link btn btn-outline-secondary btn-sm" href="registrazione.php">Registrati</a>
+                </li>
+            <?php endif; ?>
+        </ul>
 
     </nav>
 </header>

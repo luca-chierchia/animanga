@@ -29,7 +29,7 @@ if($_SERVER['REQUEST_METHOD'] === 'POST'){
 }
 
 ?>
-<?php var_dump($_POST);?>
+
 <div id="loginPage" class="container-md d-flex justify-content-center align-items-center vh-100">
     <div class="row w-100">
         <div class="col-md-4 mx-auto p-4 border rounded shadow">

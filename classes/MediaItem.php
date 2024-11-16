@@ -218,7 +218,7 @@ class MediaItem implements CRUDInterface
 
     public function readAll(Database $db): array
     {
-        $dbh = $db->connectToDatabase();
+        $this->dbc = $db->connectToDatabase();
         $sql = "SELECT * FROM media_items";
         $stmt = $this->dbc->prepare($sql);
 
