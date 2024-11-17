@@ -1,19 +1,20 @@
 <?php
 session_start();
-if(!isset($_SESSION['username']) && $_SESSION['username'] == 'admin') {
-    header("location:index.php");
-    exit();
-}
-include "../classes/Database.php";
-include "../classes/MediaItem.php";
-$config = include "../util/dsn.php";
+
+include "classes/Database.php";
+include "classes/MediaItem.php";
+$config = include "util/dsn.php";
 
 $db = new Database($config);
 $id = $_GET["id"];
+
+// Validazione e Sanitizzazione dell'ID
+if (!filter_var($id, FILTER_VALIDATE_INT)) {
+    die('ID non valido');
+}
+
 $item = new MediaItem();
-$item->loadMediaItem($id,$db);
-
-
+$item->loadMediaItem($id, $db);
 ?>
 <!DOCTYPE html>
 <html lang="it">
@@ -62,6 +63,22 @@ $item->loadMediaItem($id,$db);
         .details-list li span:first-child {
             font-weight: bold;
             margin-right: 1rem;
+            width: 40%; /* Aggiunto per migliorare l'allineamento */
+        }
+
+        .details-list li span:nth-child(2) {
+            border: 2px solid transparent;
+            padding: 0.5rem;
+            border-radius: 5px;
+            transition: border-color 0.3s ease, box-shadow 0.3s ease;
+            width: 55%; /* Aggiunto per migliorare l'allineamento */
+            word-wrap: break-word; /* Per gestire testi lunghi */
+        }
+
+        /* Effetto hover sul secondo <span> */
+        .details-list li span:nth-child(2):hover {
+            border-color: #007bff; /* Colore del bordo al passaggio del mouse */
+            box-shadow: 0 0 10px rgba(0, 123, 255, 0.5); /* Ombra al passaggio del mouse */
         }
 
         .button-container {
@@ -73,61 +90,80 @@ $item->loadMediaItem($id,$db);
         .button-container a {
             width: 48%;
         }
+
+        /* Miglioramento Responsività */
+        @media (max-width: 576px) {
+            .details-list li {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+
+            .details-list li span:first-child,
+            .details-list li span:nth-child(2) {
+                width: 100%;
+            }
+
+            .button-container {
+                flex-direction: column;
+            }
+
+            .button-container a {
+                width: 100%;
+                margin-bottom: 1rem;
+            }
+        }
     </style>
 </head>
 <body>
-
 <div class="details-container">
     <h1>Dettagli Media</h1>
     <ul class="details-list">
         <li>
             <span>ID:</span>
             <span>
-                <?= htmlspecialchars($item->getId()); ?>
-                <a href="delete.php?id=<?= htmlspecialchars($item->getId()); ?>" class="btn btn-danger btn-sm ms-3">Elimina</a>
+                <?= htmlspecialchars($item->getId(), ENT_QUOTES, 'UTF-8'); ?>
             </span>
         </li>
         <li>
             <span>Titolo:</span>
-            <span><?= htmlspecialchars($item->getTitle()); ?></span>
+            <span><?= htmlspecialchars($item->getTitle(), ENT_QUOTES, 'UTF-8'); ?></span>
         </li>
         <li>
             <span>Autore:</span>
-            <span><?= htmlspecialchars($item->getAuthor()); ?></span>
+            <span><?= htmlspecialchars($item->getAuthor(), ENT_QUOTES, 'UTF-8'); ?></span>
         </li>
         <li>
             <span>Tipo di Media:</span>
-            <span><?= htmlspecialchars($item->getMediaType()); ?></span>
+            <span><?= htmlspecialchars($item->getMediaType(), ENT_QUOTES, 'UTF-8'); ?></span>
         </li>
         <li>
             <span>Descrizione:</span>
-            <span><?= htmlspecialchars($item->getDescription()); ?></span>
+            <span><?= htmlspecialchars($item->getDescription(), ENT_QUOTES, 'UTF-8'); ?></span>
         </li>
 
         <?php if ($item->getMediaType() === 'video'): ?>
             <li>
                 <span>Stagioni Totali:</span>
-                <span><?= htmlspecialchars($item->getStagioniTotali()); ?></span>
+                <span><?= htmlspecialchars($item->getStagioniTotali(), ENT_QUOTES, 'UTF-8'); ?></span>
             </li>
             <li>
                 <span>Episodi Totali:</span>
-                <span><?= htmlspecialchars($item->getEpisodiTotali()); ?></span>
+                <span><?= htmlspecialchars($item->getEpisodiTotali(), ENT_QUOTES, 'UTF-8'); ?></span>
             </li>
         <?php elseif ($item->getMediaType() === 'book'): ?>
             <li>
                 <span>Volumi Totali:</span>
-                <span><?= htmlspecialchars($item->getVolumiTotali()); ?></span>
+                <span><?= htmlspecialchars($item->getVolumiTotali(), ENT_QUOTES, 'UTF-8'); ?></span>
             </li>
             <li>
                 <span>Capitoli Totali:</span>
-                <span><?= htmlspecialchars($item->getEpisodiTotali()); ?></span>
+                <span><?= htmlspecialchars($item->getEpisodiTotali(), ENT_QUOTES, 'UTF-8'); ?></span>
             </li>
         <?php endif; ?>
     </ul>
 
     <div class="button-container">
-        <a href="update.php?id=<?= htmlspecialchars($item->getId()); ?>" class="btn btn-primary">Modifica</a>
-        <a href="delete.php?id=<?= htmlspecialchars($item->getId()); ?>" class="btn btn-danger">Elimina</a>
+        <!-- Possibilità di follow da inserire qui -->
     </div>
 </div>
 </body>

@@ -92,6 +92,11 @@ if (!isset($_SESSION['username']) || $_SESSION['username'] !== 'admin') {
         <a href="../cms/delete.php" class="btn btn-danger btn-crud">Delete</a>
         <div class="description">Rimuovi i dati dei Media</div>
     </div>
+
+    <div class="btn-wrapper">
+        <a href="../index.php" class="btn" > Home </a>
+        <a href="../logout.php" class="btn  "> Logout</a>
+    </div>
 </div>
 </body>
 </html>

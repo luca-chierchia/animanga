@@ -99,6 +99,7 @@ class MediaItem implements CRUDInterface
 
             $this->id = $array['media_item_id'];
             $this->title = $array['title'];
+            $this->mediaType = $array['media_type'];
             $this->author = $array['author'];
             $this->description = $array['description'];
             $this->stagioniTotali = $array['stagioni_totali'];

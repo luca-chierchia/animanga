@@ -1,10 +1,17 @@
-:root{
-
+:root {
+    --primary-color: #007bff;
+    --secondary-color: #6c757d;
+    --background-color: #f8f9fa;
+    --text-color: #343a40;
 }
 
-body{
 
+body {
+    font-family: 'Roboto', sans-serif;
+    background-color: var(--background-color);
+    color: var(--text-color);
 }
+
 
 .hero {
     background-size: cover;
@@ -34,4 +41,52 @@ body{
     bottom: 0;
     left: 0;
     width: 100%;
+}
+
+
+.btn-primary {
+    background-color: var(--primary-color);
+    border-color: var(--primary-color);
+    transition: background-color 0.3s ease, border-color 0.3s ease;
+}
+
+.card {
+    background-color: #fff;
+    border: none;
+}
+.card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 16px rgba(0,0,0,0.2);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+
+.btn-primary:hover {
+    background-color: #0056b3;
+    border-color: #004085;
+}
+
+h2 {
+    font-size: 2rem;
+    margin-bottom: 1rem;
+}
+
+.card-title {
+    font-size: 1.25rem;
+    font-weight: 700;
+}
+
+.card-text {
+    font-size: 1rem;
+    color: #555;
+}
+section {
+    padding: 60px 0;
+}
+
+.container-md {
+    padding: 20px;
+}
+.card-body {
+    padding: 20px;
 }
