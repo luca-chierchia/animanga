@@ -88,7 +88,7 @@ class MediaItem implements CRUDInterface
         $this->dbc = $db->connectToDatabase();
         $sql = "SELECT * FROM media_items WHERE media_item_id = :media_item_id";
         $stmt = $this->dbc->prepare($sql);
-        $stmt->bindParam(':media_item_id', $id, PDO::PARAM_INT);
+        $stmt->bindValue(':media_item_id', $id, PDO::PARAM_INT);
 
         try{
             $stmt->execute();

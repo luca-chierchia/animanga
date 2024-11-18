@@ -10,8 +10,8 @@ $db = new Database($config);
 $dbc = $db->connectToDatabase();
 session_start();
 if($_SERVER['REQUEST_METHOD'] === 'POST'){
-    $username = $_REQUEST['username'];
-    $password = $_REQUEST['psw'];
+    $username = $_POST['username'];
+    $password = $_POST['psw'];
 
     if($username === 'admin' && $password === 'sudo'){
         $_SESSION['username'] = $username;
@@ -20,6 +20,7 @@ if($_SERVER['REQUEST_METHOD'] === 'POST'){
     }
     if($user = User::loadByCredentials($username,$password,$db)){
         $_SESSION['username'] = $username;
+        $_SESSION['user'] = $user;
         header('Location: user/userDashboard.php');
         exit;
 
