@@ -39,9 +39,9 @@ if (isset($_SESSION['username'])) {
 
             <ul class="navbar-nav flex-row ">
                 <li class="nav-item mx-2"> <a class="nav-link" href="index.php"> Home </a> </li>
-                <li class="nav-item mx-2" > <a class="nav-link" href=""> Anime </a> </li>
-                <li class="nav-item mx-2"> <a class="nav-link" href=""> Manga </a> </li>
-                <li class="nav-item mx-2"> <a class="nav-link" href=""> Serie TV</a> </li>
+                <li class="nav-item mx-2" > <a class="nav-link" href="anime.php"> Anime </a> </li>
+                <li class="nav-item mx-2"> <a class="nav-link" href="manga.php"> Manga </a> </li>
+                <li class="nav-item mx-2"> <a class="nav-link" href="serieTv.php"> Serie TV</a> </li>
             </ul>
 
 

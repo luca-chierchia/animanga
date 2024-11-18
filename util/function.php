@@ -33,3 +33,6 @@ function mostFollowed(string $type, Database $db):array
 
 
 };
+
+// aggiungere Funzione per matchare nelle pagine anime.php && manga.php && serieTv.php gli item di cui un user è follow,
+// ed evidenziarli con un etichetta che indica questa informazione
