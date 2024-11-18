@@ -13,7 +13,7 @@ if($_SERVER['REQUEST_METHOD'] === 'POST'){
     $username = $_POST['username'];
     $password = $_POST['psw'];
 
-    if($username === 'admin' && $password === 'sudo'){
+    if($username === 'motodico' && $password === 'motodico2'){
         $_SESSION['username'] = $username;
         header('Location: admin/adminDashboard.php');
         exit;
