@@ -26,12 +26,12 @@ if (isset($_POST['title'], $_POST['author'], $_POST['media_type'], $_POST['descr
         $item = new MediaItem();
         $test = $item->create($_POST, $db);
         $processed = "success";
-        header('Location: crudProcessed.php?processed=' . $processed);
+        header('Location: cProcessed.php?processed=' . $processed);
         exit();
 
     }catch (Exception $e) {
         $processed = "fail";
-        header('Location: crudProcessed.php?processed=' . $processed);
+        header('Location: cProcessed.php?processed=' . $processed);
         exit();
     }
 

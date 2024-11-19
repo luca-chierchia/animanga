@@ -34,5 +34,23 @@ function mostFollowed(string $type, Database $db):array
 
 };
 
+function dbContainsId(int $int, Database $db):bool{
+
+    $dbc = $db->connectToDatabase();
+    $sql = "SELECT 1 AS recordId FROM media_items WHERE media_item_id = :id";
+    $stmt = $dbc->prepare($sql);
+    $stmt->bindValue(':id', $int, pdo::PARAM_INT);
+    $stmt->execute();
+    $stmt->setFetchMode(\PDO::FETCH_ASSOC);
+    $contains = $stmt->fetch();
+
+    if($contains['recordId'] > 0){
+        return true;
+    }else
+        return false;
+
+
+}
+
 // aggiungere Funzione per matchare nelle pagine anime.php && manga.php && serieTv.php gli item di cui un user è follow,
 // ed evidenziarli con un etichetta che indica questa informazione

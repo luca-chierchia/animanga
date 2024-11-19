@@ -12,6 +12,7 @@ $status = isset($_GET['processed']) ? $_GET['processed'] : 'unknown';
 </head>
 <body>
 <div class="container mt-5">
+
     <?php if ($status === 'success'): ?>
         <div class="alert alert-success" role="alert">
             Il media è stato creato con successo!

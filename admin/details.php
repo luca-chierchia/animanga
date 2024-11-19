@@ -84,7 +84,7 @@ $item->loadMediaItem($id,$db);
             <span>ID:</span>
             <span>
                 <?= htmlspecialchars($item->getId()); ?>
-                <a href="delete.php?id=<?= htmlspecialchars($item->getId()); ?>" class="btn btn-danger btn-sm ms-3">Elimina</a>
+                <a href="../cms/delete.php?id=<?= htmlspecialchars($item->getId()); ?>" class="btn btn-danger btn-sm ms-3">Elimina</a>
             </span>
         </li>
         <li>
@@ -127,7 +127,7 @@ $item->loadMediaItem($id,$db);
 
     <div class="button-container">
         <a href="update.php?id=<?= htmlspecialchars($item->getId()); ?>" class="btn btn-primary">Modifica</a>
-        <a href="delete.php?id=<?= htmlspecialchars($item->getId()); ?>" class="btn btn-danger">Elimina</a>
+        <a href="../cms/delete.php?id=<?= htmlspecialchars($item->getId()); ?>" class="btn btn-danger">Elimina</a>
     </div>
 </div>
 </body>
