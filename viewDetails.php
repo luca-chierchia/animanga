@@ -1,16 +1,22 @@
 <?php
-session_start();
-
 include "classes/Database.php";
 include "classes/MediaItem.php";
 $config = include "util/dsn.php";
+include 'util/function.php';
+
+session_start();
+
+
 
 $db = new Database($config);
 $id = $_GET["id"];
 
-// Validazione e Sanitizzazione dell'ID
-if (!filter_var($id, FILTER_VALIDATE_INT)) {
-    die('ID non valido');
+$exist = dbContainsId($id,$db);
+
+
+if (!filter_var($id, FILTER_VALIDATE_INT) || !$exist) {
+    header("location: util/errorPage.php ");
+    exit();
 }
 
 $item = new MediaItem();
@@ -22,7 +28,7 @@ $item->loadMediaItem($id, $db);
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Dettagli Media</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="css/bootstrap/bootstrap.min.css" rel="stylesheet">
     <style>
         body {
             background: #f8f9fa;

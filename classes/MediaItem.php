@@ -19,6 +19,7 @@ class MediaItem implements CRUDInterface
 
     private string $author;
     private string $description;
+    private string $releaseDate;
     private int $stagioniTotali;
     private int $episodiTotali;
 
@@ -74,6 +75,11 @@ class MediaItem implements CRUDInterface
         return $this->capitoliTotali;
     }
 
+    public function getReleaseDate(): string
+    {
+        return $this->releaseDate;
+    }
+
     /*
      * $arr = [
     "title"      => "prova",
@@ -102,6 +108,7 @@ class MediaItem implements CRUDInterface
             $this->mediaType = $array['media_type'];
             $this->author = $array['author'];
             $this->description = $array['description'];
+            $this->releaseDate = $array['release_date'];
             $this->stagioniTotali = $array['stagioni_totali'];
             $this->episodiTotali = $array['episodi_totali'];
             $this->volumiTotali = $array['volumi_totali'];
@@ -232,6 +239,72 @@ class MediaItem implements CRUDInterface
         }
     }
 
+    public function readAllVideoType(Database $db):array{
+        $this->dbc = $db->connectToDatabase();
+        $sql = "SELECT * FROM media_items
+                WHERE media_type = 'video'";
+        $stmt = $this->dbc->prepare($sql);
+
+        try{
+            $stmt->execute();
+            $results = $stmt->fetchAll(PDO::FETCH_ASSOC);
+            $mediaItems = [];
+
+            foreach ($results as $result) {
+                $item = new MediaItem();
+                $item->id = $result['media_item_id'];
+                $item->title = $result['title'];
+                $item->description = $result['description'];
+                $item->author = $result['author'];
+                $item->media_type = $result['media_type'];
+                $item->release_date = $result['release_date'];
+                $item->stagioni_totali = $result['stagioni_totali'];
+                $item->episodi_totali = $result['episodi_totali'];
+                $item->volumi_totali = $result['volumi_totali'];
+                $mediaItems[] = $item;
+            }
+
+            return $mediaItems;
+        }catch(PDOException $e){
+            echo "ERRORE:".$e->getMessage()."\n";
+            return [];
+        }
+    }
+
+
+    public function readAllBookType(Database $db): array{
+        $this->dbc = $db->connectToDatabase();
+        $sql = "SELECT * FROM media_items
+                WHERE media_type = 'book'";
+        $stmt = $this->dbc->prepare($sql);
+
+        try{
+            $stmt->execute();
+            $results =$stmt->fetchAll(PDO::FETCH_ASSOC);
+            $mediaItems = [];
+
+            foreach ($results as $result) {
+                $item = new MediaItem();
+                $item->id = $result['media_item_id'];
+                $item->title = $result['title'];
+                $item->description = $result['description'];
+                $item->author = $result['author'];
+                $item->media_type = $result['media_type'];
+                $item->release_date = $result['release_date'];
+                $item->stagioni_totali = $result['stagioni_totali'];
+                $item->episodi_totali = $result['episodi_totali'];
+                $item->volumi_totali = $result['volumi_totali'];
+                $mediaItems[] = $item;
+            }
+
+            return $mediaItems;
+
+
+        }catch(PDOException $e){
+            echo "ERRORE:".$e->getMessage()."\n";
+            return [];
+        }
+    }
     /*
      * public function readById(int $id): ?array{
 

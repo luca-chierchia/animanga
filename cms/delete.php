@@ -11,7 +11,7 @@ $idItem = $_GET['id'] ?? null;
 $db = new Database(include '../util/dsn.php');
 
 if(!dbContainsId($idItem, $db)){
-    header('Location: ../util/errore.php');
+    header('Location: ../util/errorPage.php');
     exit();
 }
 
