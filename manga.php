@@ -9,7 +9,7 @@ $item = new MediaItem();
 $mangaArrayObj = $item->readAllBookType($db);
 
 ?>
-
+<?php include "includes/filter.php" ?>
 <div class="container mt-4">
     <h2 class="text-center">Lista dei Manga</h2>
     <?php if (!empty($mangaArrayObj)): ?>

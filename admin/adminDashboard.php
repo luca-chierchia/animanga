@@ -89,7 +89,7 @@ if (!isset($_SESSION['username']) || $_SESSION['username'] !== 'admin') {
     </div>
 
     <div class="btn-wrapper">
-        <a href="../cms/delete.php" class="btn btn-danger btn-crud">Delete</a>
+        <a href="../cms/read.php" class="btn btn-danger btn-crud">Delete</a>
         <div class="description">Rimuovi i dati dei Media</div>
     </div>
 

@@ -31,7 +31,57 @@ class MediaItem implements CRUDInterface
 
     }
 
-    public  function getMediaType(): string
+    public function setMediaType(string $mediaType): void
+    {
+        $this->mediaType = $mediaType;
+    }
+
+    public function setId(int $id): void
+    {
+        $this->id = $id;
+    }
+
+    public function setTitle(string $title): void
+    {
+        $this->title = $title;
+    }
+
+    public function setAuthor(string $author): void
+    {
+        $this->author = $author;
+    }
+
+    public function setDescription(string $description): void
+    {
+        $this->description = $description;
+    }
+
+    public function setReleaseDate(string $releaseDate): void
+    {
+        $this->releaseDate = $releaseDate;
+    }
+
+    public function setStagioniTotali(int $stagioniTotali): void
+    {
+        $this->stagioniTotali = $stagioniTotali;
+    }
+
+    public function setEpisodiTotali(int $episodiTotali): void
+    {
+        $this->episodiTotali = $episodiTotali;
+    }
+
+    public function setVolumiTotali(int $volumiTotali): void
+    {
+        $this->volumiTotali = $volumiTotali;
+    }
+
+    public function setCapitoliTotali(int $capitoliTotali): void
+    {
+        $this->capitoliTotali = $capitoliTotali;
+    }
+
+    public function getMediaType(): string
     {
         return $this->mediaType;
     }
@@ -127,10 +177,6 @@ class MediaItem implements CRUDInterface
     public function create(array $data, Database $db): bool
     {
         $this->dbc = $db->connectToDatabase();
-
-
-
-
         $sql = "INSERT INTO media_items (title, description, author ,media_type, release_date, stagioni_totali, episodi_totali, volumi_totali, capitoli_totali)
                 VALUES (:title, :description, :author ,:media_type, :release_date, :stagioni_totali, :episodi_totali, :volumi_totali, :capitoli_totali)";
         $data['release_date'] = date('Y-m-d');

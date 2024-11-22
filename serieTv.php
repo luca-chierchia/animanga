@@ -1,6 +1,6 @@
 <?php
 include 'includes/header.php';
-include 'classes/database.php';
+include 'classes/Database.php';
 include 'classes/MediaItem.php';
 
 $db = new Database(include 'util/dsn.php');
@@ -8,7 +8,7 @@ $item = new MediaItem();
 
 $videoArrayObj = $item->readAllVideoType($db);
 ?>
-
+<?php include 'includes/filter.php'  ?>
 <div class="container mt-4">
     <h2 class="text-center">Lista dei Manga</h2>
     <?php if (!empty($videoArrayObj)): ?>
