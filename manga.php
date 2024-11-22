@@ -1,12 +1,13 @@
 <?php
 include 'includes/header.php';
-include 'classes/database.php';
+include 'classes/Database.php';
 include 'classes/MediaItem.php';
 
 $db = new Database(include 'util/dsn.php');
 $item = new MediaItem();
 
 $mangaArrayObj = $item->readAllBookType($db);
+
 ?>
 
 <div class="container mt-4">

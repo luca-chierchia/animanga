@@ -52,7 +52,20 @@ function dbContainsId(int $int, Database $db):bool{
 
 }
 
+function dbContainsUser(string $username, Database $db):bool{
+    $dbc = $db->connectToDatabase();
+    $sql = "SELECT 1 AS recordId FROM users WHERE username = :username";
+    $stmt = $dbc->prepare($sql);
+    $stmt->bindValue(':username', $username, pdo::PARAM_STR);
+    $stmt->execute();
+    $result = $stmt->fetch();
 
+    if($result)
+        return true;
+    else
+        return false;
+
+}
 
 // aggiungere Funzione per matchare nelle pagine anime.php && manga.php && serieTv.php gli item di cui un user è follow,
 // ed evidenziarli con un etichetta che indica questa informazione

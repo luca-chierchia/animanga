@@ -112,7 +112,13 @@ foreach ($arrOfMediaItems as $item) {
             </table>
         <?php endif; ?>
     </div>
+    <a href="../index.php">
+        <button type="button">Torna alla Home</button>
+    </a>
 </div>
+
+
+</body>
 </body>
 </html>
 

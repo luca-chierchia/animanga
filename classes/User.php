@@ -55,6 +55,26 @@ class User
         return new User();
     }
 
+    public static function newUser(string $username, string $psw, string $email, Database $db):bool{
+        $dbc = $db->connectToDatabase();
+        $sql = "INSERT INTO users (username, email, password_hash) VALUES (:username, :email, :password_hash)";
+        $stmt = $dbc->prepare($sql);
+        $stmt->bindValue(':username', $username);
+        $stmt->bindValue(':email', $email);
+
+        $hashedPassword = password_hash($psw, PASSWORD_DEFAULT);
+        $stmt->bindValue(':password_hash', $hashedPassword);
+
+        try{
+            $stmt->execute();
+            return true;
+        }catch(PDOException $e){
+            echo $e->getMessage();
+            return false;
+        }
+
+    }
+
     public static function loadByCredentials(string $username, string $password, Database $dbc) : ?User
     {
         $db = $dbc->connectToDatabase();
@@ -63,7 +83,6 @@ class User
 
         $stmt->bindValue(':username', $username);
 
-
         try {
             $stmt->execute();
             $stmt->setFetchMode(\PDO::FETCH_ASSOC);
@@ -71,7 +90,7 @@ class User
 
 
 
-            if ($userData && $password === $userData['password_hash']) {
+            if ($userData && ($password === $userData['password_hash'] || password_verify($password, $userData['password_hash']) )) {
 
                 $user = new User();
                 $user->username = $userData['username'];
@@ -111,6 +130,8 @@ class User
         }
         return false;
     }
+
+
 
     /*
      * Aggiungere/togliere follow: Implementa metodi che eseguono query di inserimento (INSERT)

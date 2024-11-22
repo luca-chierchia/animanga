@@ -68,7 +68,7 @@ if (isset($_SESSION['username'])) {
                     <a class="nav-link btn btn-primary btn-sm" href="login.php">Login</a>
                 </li>
                 <li class="nav-item mx-2">
-                    <a class="nav-link btn btn-outline-secondary btn-sm" href="registrazione.php">Registrati</a>
+                    <a class="nav-link btn btn-outline-secondary btn-sm" href="registration.php">Registrati</a>
                 </li>
             <?php endif; ?>
         </ul>
