@@ -34,7 +34,25 @@ foreach ($arrOfMediaItems as $item) {
     elseif($item->getMediaType() === "book")
         $manga[] = $item;
 }
-$id = $user->getId();
+
+$arr2 = $user->getMediaItem();
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['increment'], $_POST['media_item_id'])) {
+    $mediaItemId = intval($_POST['media_item_id']);
+    $item = new MediaItem();
+    $item = $item->loadMediaItem($mediaItemId, $db);
+    $type = $_POST['type'];
+    if ($type === 'episode') {
+        $user->incrementEpisodes($item, $db); // Incrementa gli episodi
+    } elseif ($type === 'chapter') {
+        $user->incrementChapter($item, $db); // Incrementa i capitoli
+    }
+
+    // Ricarica la pagina per aggiornare i dati
+    header("Location: " . $_SERVER['PHP_SELF']);
+    exit();
+}
+
+
 
 ?>
 
@@ -64,6 +82,7 @@ $id = $user->getId();
                     <th>Episodi Visti</th>
                     <th>Episodi Totali</th>
                     <th>ID</th>
+                    <th>Episodi+</th>
                     <th>Unfollow</th>
                 </tr>
                 </thead>
@@ -73,9 +92,27 @@ $id = $user->getId();
                         <?php  ?>
                         <td><?= htmlspecialchars($tv->getTitle()); ?></td>
                         <td><?= htmlspecialchars($tv->getAuthor()); ?></td>
-                        <td><?php echo $episodiVisti ?></td>
+                        <td>  <?php
+                            // Trova il progresso degli episodi visti per il media corrente
+                            $episodesWatched = 0; // Valore di default
+                            foreach ($arr2 as $progress) {
+                                if ($progress['media_item_id'] == $tv->getId()) {
+                                    $episodesWatched = htmlspecialchars($progress['episodes_watched']);
+                                    break;
+                                }
+                            }
+                            echo $episodesWatched;
+                            ?></td>
                         <td><?= htmlspecialchars($tv->getEpisodiTotali()); ?></td>
                         <td><?= htmlspecialchars($tv->getId()) ?></td>
+                        <td>
+                            <!-- Incrementa Episodi -->
+                            <form method="POST" class="d-inline">
+                                <input type="hidden" name="media_item_id" value="<?= htmlspecialchars($tv->getId()) ?>">
+                                <input type="hidden" name="type" value="episode">
+                                <button type="submit" name="increment" class="btn btn-success btn-sm">+1 Episodio</button>
+                            </form>
+                        </td>
                         <td> <form action="unfollow.php" method="POST" class="d-inline">
                                 <input type="hidden" name="media_item_id" value="<?= htmlspecialchars($tv->getId()) ?>">
                                 <button type="submit" class="btn btn-danger btn-sm">Unfollow</button>
@@ -101,6 +138,7 @@ $id = $user->getId();
                     <th>Capitoli Letti</th>
                     <th>Capitoli Totali</th>
                     <th>ID:</th>
+                    <th>Capitoli+</th>
                     <th>Unfollow</th>
                 </tr>
                 </thead>
@@ -109,9 +147,30 @@ $id = $user->getId();
                     <tr>
                         <td><?= htmlspecialchars($m->getTitle()); ?></td>
                         <td><?= htmlspecialchars($m->getAuthor()); ?></td>
-                        <td></td>
+                        <td>
+                            <?php
+                            // Trova il progresso degli episodi visti per il media corrente
+                            $chaptersRead = 0; // Valore di default
+                            foreach ($arr2 as $progress) {
+                                if ($progress['media_item_id'] == $m->getId()) {
+                                    $chaptersRead = htmlspecialchars($progress['chapters_read']);
+                                    break;
+                                }
+                            }
+                            echo $chaptersRead;
+                            ?>
+
+                        </td>
                         <td><?= htmlspecialchars($m->getCapitoliTotali()); ?></td>
                         <td><?= htmlspecialchars($m->getId()); ?></td>
+                        <td>
+                            <!-- Incrementa Capitoli -->
+                            <form method="POST" class="d-inline">
+                                <input type="hidden" name="media_item_id" value="<?= htmlspecialchars($m->getId()) ?>">
+                                <input type="hidden" name="type" value="chapter">
+                                <button type="submit" name="increment" class="btn btn-success btn-sm">+1 Capitolo</button>
+                            </form>
+                        </td>
                         <td> <form action="unfollow.php" method="POST" class="d-inline">
                                 <input type="hidden" name="media_item_id" value="<?= htmlspecialchars($m->getId()) ?>">
                                 <button type="submit" class="btn btn-danger btn-sm">Unfollow</button>

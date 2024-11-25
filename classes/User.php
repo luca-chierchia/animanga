@@ -306,4 +306,27 @@ class User
         }
         return $items;
     }
+
+    public function getEpisodesWatched(int $itemId,Database $db): int{
+        $dbc = $db->connectToDatabase();
+        $sql = "SELECT episodes_watched
+                FROM progress WHERE user_id = :user_id AND media_item_id = :media_item_id";
+        $stmt = $dbc->prepare($sql);
+        $stmt->bindValue(':user_id', $this->id, PDO::PARAM_INT);
+        $stmt->bindValue(':media_item_id', $itemId, PDO::PARAM_INT);
+        $stmt->execute();
+        return $currentProgress = $stmt->fetchColumn();
+
+    }
+
+    public function getChaptersRead(int $itemId,Database $db): int {
+        $dbc = $db->connectToDatabase();
+        $sql = "SELECT chapters_read
+                FROM progress WHERE user_id = :user_id AND media_item_id = :media_item_id";
+        $stmt = $dbc->prepare($sql);
+        $stmt->bindValue(':user_id', $this->id, PDO::PARAM_INT);
+        $stmt->bindValue(':media_item_id', $itemId, PDO::PARAM_INT);
+        $stmt->execute();
+        return $currentProgress = $stmt->fetchColumn();
+    }
 }
