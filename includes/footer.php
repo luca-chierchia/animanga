@@ -1,13 +1,14 @@
 <footer>
 
-    <div class="container-fluid     border-top bg-secondary text-center sticky-footer ">
+    <div class="container-fluid   border-top bg-secondary text-center sticky-footer ">
 
         <div class="row">
             <div class="col-md-4">
                 <p>Lore ipsum</p>
             </div>
             <div class="col-md-4">
-                <p>Luca</p>
+                <p>Luca Chierchia</p>
+
             </div>
             <div class="col-md-4">
                 <p>Lore ipsum</p>

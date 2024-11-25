@@ -138,16 +138,16 @@ class User
      *  o eliminazione (DELETE) nella tabella progress o user_media_items per riflettere i cambiamenti
      * nel database.
      */
-    public function followMediaItems(MediaItem $mediaItem,Database $dbc) : bool{
+    public function followMediaItem(MediaItem $mediaItem,Database $db) : bool{
         if($this->containsMediaItem($mediaItem)){
             echo "sei già un follower di questo media";
             return false;
         }
 
-        $db = $dbc->connectToDatabase();
+        $dbc = $db->connectToDatabase();
         $sql = "INSERT INTO progress (media_item_id, user_id, episodes_watched, chapters_read) 
                 VALUES (:media_item_id, :user_id, :episodes_watched, :chapters_read)";
-        $stmt = $db->prepare($sql);
+        $stmt = $dbc->prepare($sql);
         $stmt->bindValue(':media_item_id', $mediaItem->getId(), PDO::PARAM_INT);
         $stmt->bindValue(':user_id',$this->id, PDO::PARAM_INT);
         $stmt->bindValue(':chapters_read',0, PDO::PARAM_INT);
@@ -163,7 +163,7 @@ class User
             $db = null;
         }
     }
-    public function unfollowMediaItems(MediaItem $mediaItem,Database $db) : bool{
+    public function unfollowMediaItem(MediaItem $mediaItem,Database $db) : bool{
         if($this->containsMediaItem($mediaItem)){
 
             $sql = "DELETE FROM progress WHERE media_item_id = :media_item_id AND user_id = :user_id";

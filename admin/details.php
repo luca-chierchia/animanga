@@ -120,7 +120,7 @@ $item->loadMediaItem($id,$db);
             </li>
             <li>
                 <span>Capitoli Totali:</span>
-                <span><?= htmlspecialchars($item->getEpisodiTotali()); ?></span>
+                <span><?= htmlspecialchars($item->getCapitoliTotali()); ?></span>
             </li>
         <?php endif; ?>
     </ul>

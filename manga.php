@@ -1,4 +1,5 @@
 <?php
+include 'classes/User.php';
 include 'includes/header.php';
 include 'classes/Database.php';
 include 'classes/MediaItem.php';
@@ -8,9 +9,24 @@ $item = new MediaItem();
 
 $mangaArrayObj = $item->readAllBookType($db);
 
+// Verifica se l'utente è loggato
+$user = $_SESSION['user'] ?? null;
+
+$arrOfMediaItems = [];
+if ($user) {
+    // Carica i media seguiti dall'utente
+    $userMediaItem = $user->getMediaItem();
+    foreach ($userMediaItem as $item) {
+        $items = new MediaItem();
+        $items = $items->loadMediaItem($item['media_item_id'], $db);
+        if ($items) {
+            $arrOfMediaItems[] = $items;
+        }
+    }
+}
 ?>
 <?php include "includes/filter.php" ?>
-<div class="container mt-4">
+<div class="container mt-4 my-4">
     <h2 class="text-center">Lista dei Manga</h2>
     <?php if (!empty($mangaArrayObj)): ?>
         <table class="table table-bordered table-striped">
@@ -19,18 +35,60 @@ $mangaArrayObj = $item->readAllBookType($db);
                 <th>ID</th>
                 <th>Titolo</th>
                 <th>Autore</th>
+                <?php if ($user): ?>
+                    <th>Seguito</th>
+                    <th>Azioni</th>
+                <?php endif; ?>
                 <th>Dettagli</th>
-
             </tr>
             </thead>
             <tbody>
             <?php foreach ($mangaArrayObj as $manga): ?>
-                <tr>
+                <?php
+                // Determina se il manga è seguito, solo se l'utente è loggato
+                $isFollowed = false;
+                if ($user) {
+                    foreach ($arrOfMediaItems as $followedItem) {
+                        if ($manga->getId() === $followedItem->getId()) {
+                            $isFollowed = true;
+                            break;
+                        }
+                    }
+                }
+                ?>
+                <tr class="<?= $user && $isFollowed ? 'table-success' : '' ?>">
                     <td><?= htmlspecialchars($manga->getId()) ?></td>
                     <td><?= htmlspecialchars($manga->getTitle()) ?></td>
                     <td><?= htmlspecialchars($manga->getAuthor()) ?></td>
-                    <td><a href="viewDetails.php?id=<?= htmlspecialchars($manga->getId()) ?>" class="btn btn-light text-decoration-none">dettagli</a> </td>
-
+                    <?php if ($user): ?>
+                        <td>
+                            <?php if ($isFollowed): ?>
+                                <span class="badge bg-success">Seguito</span>
+                            <?php else: ?>
+                                <span class="badge bg-secondary">Non seguito</span>
+                            <?php endif; ?>
+                        </td>
+                        <td>
+                            <?php if ($isFollowed): ?>
+                                <!-- Pulsante Unfollow -->
+                                <form action="user/unfollow.php" method="POST" class="d-inline">
+                                    <input type="hidden" name="media_item_id" value="<?= htmlspecialchars($manga->getId()) ?>">
+                                    <button type="submit" class="btn btn-danger btn-sm">Unfollow</button>
+                                </form>
+                            <?php else: ?>
+                                <!-- Pulsante Follow -->
+                                <form action="user/follow.php" method="POST" class="d-inline">
+                                    <input type="hidden" name="media_item_id" value="<?= htmlspecialchars($manga->getId()) ?>">
+                                    <button type="submit" class="btn btn-primary btn-sm">Follow</button>
+                                </form>
+                            <?php endif; ?>
+                        </td>
+                    <?php endif; ?>
+                    <td>
+                        <a href="viewDetails.php?id=<?= htmlspecialchars($manga->getId()) ?>" class="btn btn-light text-decoration-none">
+                            dettagli
+                        </a>
+                    </td>
                 </tr>
             <?php endforeach; ?>
             </tbody>
@@ -40,8 +98,4 @@ $mangaArrayObj = $item->readAllBookType($db);
     <?php endif; ?>
 </div>
 
-
-
-
-
-<?php include 'includes/footer.php' ?>
+<?php include 'includes/footer.php'; ?>

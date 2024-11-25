@@ -25,7 +25,6 @@ foreach ($array as $item) {
         array_push($SerieTvArray, $item);
 }
 
-
 ?>
 <!DOCTYPE html>
 <html lang="it">

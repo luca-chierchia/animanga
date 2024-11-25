@@ -2,6 +2,7 @@
 require_once '../classes/User.php';
 require_once '../classes/MediaItem.php';
 require_once '../classes/Database.php';
+include '../util/functions.php';
 $config = include "../util/dsn.php";
 session_start();
 
@@ -33,6 +34,8 @@ foreach ($arrOfMediaItems as $item) {
     elseif($item->getMediaType() === "book")
         $manga[] = $item;
 }
+$id = $user->getId();
+
 ?>
 
 <!DOCTYPE html>
@@ -58,7 +61,7 @@ foreach ($arrOfMediaItems as $item) {
                 <tr>
                     <th>Titolo</th>
                     <th>Autore</th>
-                    <th>Episodi visti</th>
+                    <th>Episodi Visti</th>
                     <th>Episodi Totali</th>
                     <th>ID</th>
                     <th>Unfollow</th>
@@ -67,12 +70,16 @@ foreach ($arrOfMediaItems as $item) {
                 <tbody>
                 <?php foreach ($tvSeries as $tv) : ?>
                     <tr>
+                        <?php  ?>
                         <td><?= htmlspecialchars($tv->getTitle()); ?></td>
                         <td><?= htmlspecialchars($tv->getAuthor()); ?></td>
-                        <td>Ep visti</td>
+                        <td><?php echo $episodiVisti ?></td>
                         <td><?= htmlspecialchars($tv->getEpisodiTotali()); ?></td>
                         <td><?= htmlspecialchars($tv->getId()) ?></td>
-                        <td>Tasto unfollow coming soon</td>
+                        <td> <form action="unfollow.php" method="POST" class="d-inline">
+                                <input type="hidden" name="media_item_id" value="<?= htmlspecialchars($tv->getId()) ?>">
+                                <button type="submit" class="btn btn-danger btn-sm">Unfollow</button>
+                            </form></td>
                     </tr>
                 <?php endforeach; ?>
                 </tbody>
@@ -102,10 +109,13 @@ foreach ($arrOfMediaItems as $item) {
                     <tr>
                         <td><?= htmlspecialchars($m->getTitle()); ?></td>
                         <td><?= htmlspecialchars($m->getAuthor()); ?></td>
-                        <td>Cap letti</td>
+                        <td></td>
                         <td><?= htmlspecialchars($m->getCapitoliTotali()); ?></td>
                         <td><?= htmlspecialchars($m->getId()); ?></td>
-                        <td>Tasto unfollow coming soon</td>
+                        <td> <form action="unfollow.php" method="POST" class="d-inline">
+                                <input type="hidden" name="media_item_id" value="<?= htmlspecialchars($m->getId()) ?>">
+                                <button type="submit" class="btn btn-danger btn-sm">Unfollow</button>
+                            </form></td>
                     </tr>
                 <?php endforeach; ?>
                 </tbody>
