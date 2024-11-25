@@ -3,6 +3,7 @@ include 'classes/User.php';
 include 'includes/header.php';
 include 'classes/Database.php';
 include 'classes/MediaItem.php';
+include 'util/function.php';
 
 $db = new Database(include 'util/dsn.php');
 $item = new MediaItem();
@@ -24,8 +25,15 @@ if ($user) {
         }
     }
 }
+
+
 ?>
-<?php include "includes/filter.php" ?>
+<?php
+include "includes/filter.php";
+
+
+?>
+
 <div class="container mt-4 my-4">
     <h2 class="text-center">Lista dei Manga</h2>
     <?php if (!empty($mangaArrayObj)): ?>
