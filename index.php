@@ -35,7 +35,7 @@ $db = new Database($config);
                     <div class="col-md-3 mb-4">
                         <div class="card h-100 shadow-sm">
 
-                            <div class="card-body">
+                            <div class="card-body" style="max-width: 300px; height: 400px; overflow: hidden;">
                                 <h5 class="card-title"><?php echo htmlspecialchars($item->getTitle(), ENT_QUOTES, 'UTF-8'); ?></h5>
                                 <p class="card-text"><strong>Author:</strong> <?php echo htmlspecialchars($item->getAuthor(), ENT_QUOTES, 'UTF-8'); ?></p>
                                 <p class="card-text"><strong>Ep:</strong> <?php echo htmlspecialchars($item->getEpisodiTotali(), ENT_QUOTES, 'UTF-8'); ?></p>
@@ -75,12 +75,12 @@ $db = new Database($config);
             <div class="row justify-content-between g-4">
                 <?php foreach ($arrOfMangaItem as $item) { ?>
                     <div class="col-md-3 mb-4">
-                        <div class="card h-100 shadow-sm">
+                        <div class="card h-100 shadow-sm" >
 
-                            <div class="card-body">
+                            <div class="card-body" style="max-width: 300px; height: 400px; overflow: hidden;">
                                 <h5 class="card-title"><?php echo htmlspecialchars($item->getTitle(), ENT_QUOTES, 'UTF-8'); ?></h5>
                                 <p class="card-text"><strong>Author:</strong> <?php echo htmlspecialchars($item->getAuthor(), ENT_QUOTES, 'UTF-8'); ?></p>
-                                <p class="card-text"><strong>Cap:</strong> <?php echo htmlspecialchars($item->getEpisodiTotali(), ENT_QUOTES, 'UTF-8'); ?></p>
+                                <p class="card-text"><strong>Cap:</strong> <?php echo htmlspecialchars($item->getCapitoliTotali(), ENT_QUOTES, 'UTF-8'); ?></p>
                                 <p class="card-text"><strong>Descrizione:</strong> <?php echo htmlspecialchars($item->getDescription(), ENT_QUOTES, 'UTF-8'); ?></p>
                             </div>
                             <div class="card-footer bg-transparent border-top-0">

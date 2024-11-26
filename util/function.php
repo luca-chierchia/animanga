@@ -13,7 +13,7 @@ function mostFollowed(string $type, Database $db):array
         WHERE media_items.media_type = :type
         GROUP BY progress.media_item_id, media_items.media_type
         ORDER BY frequency DESC
-        LIMIT 3;";
+        LIMIT 4;";
 
     $dbc = $db->connectToDatabase();
     $stmt = $dbc->prepare($sql);
