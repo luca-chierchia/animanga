@@ -8,7 +8,7 @@ if (!isset($_SESSION['username']) || $_SESSION['username'] !== 'admin') {
     header('Location: ../login.php');
     exit;
 }
-
+$id = $_POST['id'];
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $confirm = isset($_POST['confirm']) ? $_POST['confirm'] : null;
     $arr = [
@@ -23,13 +23,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     ];
 
+    var_dump($arr);
 
     if ($confirm === 'yes') {
         $item = new MediaItem();
         $db = new Database(require '../util/dsn.php');
 
-        var_dump($arr);
-        if ($item->update($arr, $db)) {
+
+        if ($item->update($arr, $id, $db)) {
             $operazione = "confirmed";
             header('Location: statusOperationUpdate.php?operazione=' . $operazione);
             exit;

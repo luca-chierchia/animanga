@@ -78,7 +78,7 @@ if(!dbContainsId($idItem, $db)){
         <!-- ID (readonly) -->
         <div class="form-group">
             <label for="id">ID:</label>
-            <input type="number" id="id" name="id" class="form-control" value="<?= $media['id'] ?? '' ?>" readonly required>
+            <input type="number" id="id" name="id" class="form-control" value="<?= $idItem ??'' ?>" readonly required>
         </div>
 
         <!-- Titolo -->
