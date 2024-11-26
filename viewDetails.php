@@ -163,7 +163,7 @@ $item->loadMediaItem($id, $db);
             </li>
             <li>
                 <span>Capitoli Totali:</span>
-                <span><?= htmlspecialchars($item->getEpisodiTotali(), ENT_QUOTES, 'UTF-8'); ?></span>
+                <span><?= htmlspecialchars($item->getCapitoliTotali(), ENT_QUOTES, 'UTF-8'); ?></span>
             </li>
         <?php endif; ?>
     </ul>

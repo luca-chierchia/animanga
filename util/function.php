@@ -68,5 +68,72 @@ function dbContainsUser(string $username, Database $db):bool{
 }
 
 
+function readFilteredBookType(Database $db,string $title, string $author)
+{
+    $dbc = $db->connectToDatabase();
+    $query = "SELECT * FROM media_items WHERE media_type = 'book'";
+    $params = [];
+
+    if (!empty($title)) {
+        $query .= " AND title LIKE :title";
+        $params[':title'] = '%' . $title . '%';
+    }
+
+    if (!empty($author)) {
+        $query .= " AND author LIKE :author";
+        $params[':author'] = '%' . $author . '%';
+    }
+
+    try {
+        $stmt = $dbc->prepare($query);
+        $stmt->execute($params);
+    } catch (PDOException $e) {
+        echo "Errore durante l'esecuzione della query: " . $e->getMessage();
+        die(); // Interrompi l'esecuzione per debug
+    }
+
+    $results = $stmt->fetchAll(PDO::FETCH_ASSOC);
+    $items = [];
+    foreach ($results as $result) {
+        $mediaItem = new MediaItem();
+        $mediaItem->loadMediaItem($result['media_item_id'],$db);
+        $items[] = $mediaItem;
+    }
+    return $items;
+}
+
+function readFilteredVideoType(Database $db,string $title, string $author)
+{
+    $dbc = $db->connectToDatabase();
+    $query = "SELECT * FROM media_items WHERE media_type = 'video'";
+    $params = [];
+
+    if (!empty($title)) {
+        $query .= " AND title LIKE :title";
+        $params[':title'] = '%' . $title . '%';
+    }
+
+    if (!empty($author)) {
+        $query .= " AND author LIKE :author";
+        $params[':author'] = '%' . $author . '%';
+    }
+
+    try {
+        $stmt = $dbc->prepare($query);
+        $stmt->execute($params);
+    } catch (PDOException $e) {
+        echo "Errore durante l'esecuzione della query: " . $e->getMessage();
+        die(); // Interrompi l'esecuzione per debug
+    }
+
+    $results = $stmt->fetchAll(PDO::FETCH_ASSOC);
+    $items = [];
+    foreach ($results as $result) {
+        $mediaItem = new MediaItem();
+        $mediaItem->loadMediaItem($result['media_item_id'],$db);
+        $items[] = $mediaItem;
+    }
+    return $items;
+}
 
 

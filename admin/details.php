@@ -126,7 +126,7 @@ $item->loadMediaItem($id,$db);
     </ul>
 
     <div class="button-container">
-        <a href="update.php?id=<?= htmlspecialchars($item->getId()); ?>" class="btn btn-primary">Modifica</a>
+        <a href="../cms/update.php?id=<?= htmlspecialchars($item->getId()); ?>" class="btn btn-primary">Modifica</a>
         <a href="../cms/delete.php?id=<?= htmlspecialchars($item->getId()); ?>" class="btn btn-danger">Elimina</a>
     </div>
 </div>

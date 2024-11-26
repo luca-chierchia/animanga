@@ -84,7 +84,7 @@ if (!isset($_SESSION['username']) || $_SESSION['username'] !== 'admin') {
     </div>
 
     <div class="btn-wrapper">
-        <a href="../cms/update.php" class="btn btn-warning btn-crud">Update</a>
+        <a href="../cms/read.php" class="btn btn-warning btn-crud">Update</a>
         <div class="description">Aggiorna i dati dei Media</div>
     </div>
 

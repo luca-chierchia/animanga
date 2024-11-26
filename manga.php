@@ -27,12 +27,25 @@ if ($user) {
 }
 
 
-?>
-<?php
-include "includes/filter.php";
-
 
 ?>
+<div class="container-md mt-4 p-4 border rounded bg-light">
+    <h3 class="text-center mb-4">Ricerca MediaItem</h3>
+    <form method="GET" action="filteredManga.php">
+        <div class="row">
+            <div class="col-md-4">
+                <input type="text" name="title" class="form-control" placeholder="Cerca per titolo" value="<?= htmlspecialchars($_GET['title'] ?? '') ?>">
+            </div>
+            <div class="col-md-4">
+                <input type="text" name="author" class="form-control" placeholder="Cerca per autore" value="<?= htmlspecialchars($_GET['author'] ?? '') ?>">
+            </div>
+            <div class="col-md-4">
+                <button type="submit" class="btn btn-primary">Filtra</button>
+            </div>
+        </div>
+    </form>
+
+</div>
 
 <div class="container mt-4 my-4">
     <h2 class="text-center">Lista dei Manga</h2>
